@@ -75,6 +75,9 @@ module RackReverseProxy
       # Setup headers
       target_request_headers = Rack::Proxy.extract_http_request_headers(source_request.env)
 
+      # no need to encode, our Heroku already does it so we are doing it twice
+      target_request_headers.delete("ACCEPT-ENCODING")
+
       if options[:preserve_host]
         if uri.port == uri.default_port
           target_request_headers["HOST"] = uri.host
